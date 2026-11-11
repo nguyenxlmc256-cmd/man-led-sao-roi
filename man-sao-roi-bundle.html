@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lễ Thành Hôn — Minh Châu &amp; Khôi Nguyên</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Great+Vibes&family=Mea+Culpa&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+:root {
+  --font-script: "Pinyon Script", "Cormorant Garamond", "Noto Serif Display", cursive;
+  --font-serif: "Cormorant Garamond", "Noto Serif Display", Georgia, serif;
+  --font-sans: "Montserrat", "Noto Sans", system-ui, -apple-system, sans-serif;
+
+  --text-pure: #f8faff;
+  --text-silver: rgba(232, 239, 255, 0.88);
+  --text-muted: rgba(214, 224, 246, 0.72);
+  --panel-bg: rgba(7, 12, 28, 0.76);
+  --panel-border: rgba(186, 208, 255, 0.18);
+  --accent: #b8d3ff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #03060f;
+  color: var(--text-pure);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+  user-select: none;
+}
+
+body.hud-idle {
+  cursor: none;
+}
+
+body.hud-hidden .hud-controls {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Canvases stacked crisply */
+#cosmos-canvas,
+#starfall-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+#cosmos-canvas {
+  z-index: 1;
+}
+
+#starfall-canvas {
+  z-index: 2;
+}
+
+/* Soft central radial veil so script text remains ultra-legible over Milky Way */
+.center-aura {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 52% 46% at 50% 50%,
+    rgba(4, 8, 22, 0.42) 0%,
+    rgba(4, 8, 22, 0.18) 55%,
+    rgba(4, 8, 22, 0) 100%
+  );
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 92% 88% at 50% 50%,
+    transparent 58%,
+    rgba(2, 4, 12, 0.56) 100%
+  );
+}
+
+/* Stage Typography */
+.stage-content {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.25rem, 4vw, 4rem);
+  pointer-events: none;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ceremony-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: min(92vw, 1120px);
+}
+
+/* Top label with fading horizontal hairlines */
+.ceremony-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.85rem, 2.2vw, 1.9rem);
+  margin-bottom: clamp(1rem, 2.4vh, 2rem);
+}
+
+.hairline {
+  display: block;
+  width: clamp(32px, 5.5vw, 76px);
+  height: 1px;
+  opacity: 0.72;
+}
+
+.hairline-left {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(226, 236, 255, 0.65) 100%);
+}
+
+.hairline-right {
+  background: linear-gradient(90deg, rgba(226, 236, 255, 0.65) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.ceremony-label {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(0.72rem, 1.08vw, 1.05rem);
+  letter-spacing: 0.44em;
+  text-indent: 0.44em;
+  text-transform: uppercase;
+  color: var(--text-silver);
+  text-shadow: 0 2px 14px rgba(3, 8, 22, 0.8);
+}
+
+/* Couple Names */
+.couple-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 400;
+  margin: 0;
+}
+
+.name-line {
+  display: block;
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: clamp(3.3rem, 7.8vw, 7.6rem);
+  line-height: 1.24;
+  padding: 0.04em 0.22em;
+  color: var(--text-pure);
+  letter-spacing: 0.015em;
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.45),
+    0 4px 24px rgba(3, 7, 20, 0.78),
+    0 0 42px rgba(176, 208, 255, 0.22);
+  transition: font-family 0.35s ease, text-shadow 0.4s ease;
+}
+
+/* Font variations selectable by user */
+body[data-font="pinyon"] {
+  --font-script: "Pinyon Script", "Cormorant Garamond", cursive;
+}
+
+body[data-font="great-vibes"] {
+  --font-script: "Great Vibes", "Cormorant Garamond", cursive;
+}
+body[data-font="great-vibes"] .name-line {
+  font-size: clamp(3.1rem, 7.2vw, 7rem);
+  line-height: 1.28;
+}
+
+body[data-font="mea-culpa"] {
+  --font-script: "Mea Culpa", "Cormorant Garamond", cursive;
+}
+body[data-font="mea-culpa"] .name-line {
+  font-size: clamp(3.2rem, 7.4vw, 7.2rem);
+}
+
+body[data-font="alex-brush"] {
+  --font-script: "Alex Brush", "Cormorant Garamond", cursive;
+}
+body[data-font="alex-brush"] .name-line {
+  font-size: clamp(3rem, 6.9vw, 6.7rem);
+}
+
+body[data-font="cormorant"] {
+  --font-script: "Cormorant Garamond", "Noto Serif Display", Georgia, serif;
+}
+body[data-font="cormorant"] .name-line {
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.85rem, 6.4vw, 6.2rem);
+  letter-spacing: 0.04em;
+}
+
+.ampersand-line {
+  display: block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.5rem, 3.1vw, 3rem);
+  line-height: 1.05;
+  margin: clamp(0.1rem, 0.6vh, 0.45rem) 0;
+  color: rgba(232, 240, 255, 0.88);
+  text-shadow:
+    0 2px 18px rgba(3, 8, 22, 0.8),
+    0 0 26px rgba(170, 204, 255, 0.18);
+}
+
+/* Date & Quote */
+.wedding-date {
+  margin-top: clamp(1.2rem, 3vh, 2.5rem);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: clamp(0.88rem, 1.28vw, 1.22rem);
+  letter-spacing: 0.48em;
+  text-indent: 0.48em;
+  color: rgba(230, 238, 255, 0.82);
+  text-shadow: 0 2px 16px rgba(3, 8, 22, 0.85);
+}
+
+.wedding-quote {
+  margin-top: clamp(0.55rem, 1.3vh, 1.05rem);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(0.9rem, 1.32vw, 1.24rem);
+  letter-spacing: 0.045em;
+  color: var(--text-muted);
+  text-shadow: 0 2px 14px rgba(3, 8, 22, 0.85);
+}
+
+/* Entrance Reveal Animation */
+@keyframes fadeRise {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes expandLine {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  100% {
+    opacity: 0.72;
+    transform: scaleX(1);
+  }
+}
+
+body.animate-entrance .ceremony-header {
+  animation: fadeRise 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+body.animate-entrance .hairline {
+  animation: expandLine 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+
+body.animate-entrance .name-primary {
+  animation: fadeRise 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both;
+}
+
+body.animate-entrance .ampersand-line {
+  animation: fadeRise 1.3s cubic-bezier(0.22, 1, 0.36, 1) 0.75s both;
+}
+
+body.animate-entrance .name-secondary {
+  animation: fadeRise 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.95s both;
+}
+
+body.animate-entrance .wedding-date {
+  animation: fadeRise 1.3s cubic-bezier(0.22, 1, 0.36, 1) 1.3s both;
+}
+
+body.animate-entrance .wedding-quote {
+  animation: fadeRise 1.3s cubic-bezier(0.22, 1, 0.36, 1) 1.5s both;
+}
+
+/* Floating Auto-Fading HUD Controls */
+.hud-controls {
+  position: fixed;
+  right: clamp(1rem, 2.4vw, 2rem);
+  bottom: clamp(1rem, 2.4vh, 1.8rem);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  opacity: 0.92;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+body.hud-idle .hud-controls {
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+}
+
+.hud-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.52rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(190, 214, 255, 0.22);
+  background: rgba(8, 14, 34, 0.62);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgba(240, 246, 255, 0.9);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.hud-pill:hover {
+  background: rgba(20, 34, 72, 0.8);
+  border-color: rgba(204, 224, 255, 0.45);
+  transform: translateY(-1px);
+}
+
+.hud-icon {
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+
+/* Customization Panel */
+.control-panel {
+  position: fixed;
+  right: clamp(1rem, 2.4vw, 2rem);
+  bottom: clamp(4.2rem, 8vh, 5.2rem);
+  z-index: 25;
+  width: min(92vw, 680px);
+  max-height: 82vh;
+  overflow-y: auto;
+  padding: 1.25rem 1.35rem;
+  border-radius: 16px;
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65);
+  color: var(--text-pure);
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.control-panel.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(190, 214, 255, 0.14);
+}
+
+.panel-header h2 {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #f4f7ff;
+}
+
+.panel-header p {
+  margin-top: 0.25rem;
+  font-size: 0.74rem;
+  color: rgba(200, 214, 240, 0.72);
+}
+
+.icon-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(190, 214, 255, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(240, 246, 255, 0.85);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: grid;
+  place-items: center;
+  transition: background 0.2s ease;
+}
+
+.icon-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.panel-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.72rem;
+}
+
+.panel-section h3 {
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.field > span,
+.range-head {
+  font-size: 0.74rem;
+  color: rgba(220, 230, 250, 0.82);
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.field input[type="text"],
+.field select {
+  width: 100%;
+  padding: 0.5rem 0.68rem;
+  border-radius: 8px;
+  border: 1px solid rgba(190, 214, 255, 0.2);
+  background: rgba(4, 8, 22, 0.72);
+  color: #f6f9ff;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.field input[type="text"]:focus,
+.field select:focus {
+  border-color: rgba(184, 211, 255, 0.65);
+  background: rgba(8, 15, 36, 0.9);
+}
+
+.range-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.range-head output {
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  font-size: 0.75rem;
+}
+
+.field input[type="range"] {
+  width: 100%;
+  accent-color: #9ec5ff;
+  cursor: pointer;
+}
+
+.panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.action-btn {
+  padding: 0.5rem 0.82rem;
+  border-radius: 8px;
+  border: 1px solid rgba(190, 214, 255, 0.22);
+  background: rgba(255, 255, 255, 0.06);
+  color: #eef4ff;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.action-btn.primary {
+  background: rgba(145, 190, 255, 0.22);
+  border-color: rgba(184, 214, 255, 0.45);
+}
+
+.action-btn.primary:hover {
+  background: rgba(145, 190, 255, 0.34);
+}
+
+.action-btn.subtle {
+  color: rgba(210, 222, 246, 0.72);
+}
+
+@media (max-width: 680px) {
+  .panel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hud-controls {
+    right: 0.75rem;
+    bottom: 0.75rem;
+  }
+
+  .hud-pill span:not(.hud-icon) {
+    display: none;
+  }
+}
+
+</style>
+</head>
+<body class="stage-ready">
+  <!-- Layer 1: Ultra-Sharp Procedural WebGL Milky Way Cosmos -->
+  <canvas id="cosmos-canvas" aria-hidden="true"></canvas>
+
+  <!-- Layer 2: High-DPI Starfield, Diffraction Stars & Falling Star / Meteor Engine -->
+  <canvas id="starfall-canvas" aria-hidden="true"></canvas>
+
+  <!-- Layer 3: Subtle Atmospheric Contrast Veil -->
+  <div class="center-aura" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- Layer 4: Centerpiece Typography -->
+  <main id="stage-content" class="stage-content" role="main">
+    <div class="ceremony-block">
+      <div class="ceremony-header">
+        <span class="hairline hairline-left" aria-hidden="true"></span>
+        <span id="display-header" class="ceremony-label">LỄ THÀNH HÔN</span>
+        <span class="hairline hairline-right" aria-hidden="true"></span>
+      </div>
+
+      <h1 class="couple-names">
+        <span id="display-name-1" class="name-line name-primary">Minh Châu</span>
+        <span class="ampersand-line" aria-label="và">&amp;</span>
+        <span id="display-name-2" class="name-line name-secondary">Khôi Nguyên</span>
+      </h1>
+
+      <p id="display-date" class="wedding-date">14 . 11 . 2026</p>
+      <p id="display-quote" class="wedding-quote">Từ khoảnh khắc này, mình có nhau.</p>
+    </div>
+  </main>
+
+  <!-- Subtle Floating Trigger (auto-fades on idle) -->
+  <div id="hud-controls" class="hud-controls">
+    <button id="btn-wish" class="hud-pill" type="button" title="Thả sao băng (Phím Space)">
+      <span class="hud-icon" aria-hidden="true">✦</span>
+      <span>Sao băng</span>
+    </button>
+    <button id="btn-fullscreen" class="hud-pill" type="button" title="Toàn màn hình (Phím F)">
+      <span class="hud-icon" aria-hidden="true">⛶</span>
+      <span>Toàn màn hình</span>
+    </button>
+    <button id="btn-toggle-panel" class="hud-pill" type="button" title="Tùy chỉnh màn sao rơi (Phím C)">
+      <span class="hud-icon" aria-hidden="true">⚙</span>
+      <span>Tùy chỉnh</span>
+    </button>
+  </div>
+
+  <!-- Collapsible Stage Customization Drawer -->
+  <aside id="control-panel" class="control-panel" aria-label="Tùy chỉnh màn sao rơi">
+    <div class="panel-header">
+      <div>
+        <h2>Tùy Chỉnh Màn Sao Rơi</h2>
+        <p>Nhấn <strong>H</strong> để ẩn/hiện nút · Click màn hình để thả sao băng</p>
+      </div>
+      <button id="btn-close-panel" class="icon-close" type="button" aria-label="Đóng bảng tùy chỉnh">✕</button>
+    </div>
+
+    <div class="panel-grid">
+      <section class="panel-section">
+        <h3>Nội Dung Hiển Thị</h3>
+        <label class="field">
+          <span>Tiêu đề lễ</span>
+          <input id="input-header" type="text" value="LỄ THÀNH HÔN" maxlength="40" />
+        </label>
+        <div class="field-row">
+          <label class="field">
+            <span>Tên thứ nhất</span>
+            <input id="input-name-1" type="text" value="Minh Châu" maxlength="32" />
+          </label>
+          <label class="field">
+            <span>Tên thứ hai</span>
+            <input id="input-name-2" type="text" value="Khôi Nguyên" maxlength="32" />
+          </label>
+        </div>
+        <div class="field-row">
+          <label class="field">
+            <span>Ngày kỷ niệm / Cưới</span>
+            <input id="input-date" type="text" value="14 . 11 . 2026" maxlength="32" />
+          </label>
+          <label class="field">
+            <span>Phông chữ tên</span>
+            <select id="select-font">
+              <option value="pinyon">Pinyon Script (Thanh mảnh)</option>
+              <option value="great-vibes">Great Vibes (Mềm mại)</option>
+              <option value="mea-culpa">Mea Culpa (Cổ điển)</option>
+              <option value="alex-brush">Alex Brush (Nét cọ)</option>
+              <option value="cormorant">Cormorant Italic (Sang trọng)</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span>Thông điệp</span>
+          <input id="input-quote" type="text" value="Từ khoảnh khắc này, mình có nhau." maxlength="90" />
+        </label>
+      </section>
+
+      <section class="panel-section">
+        <h3>Hiệu Ứng Sao Rơi Cực Nét</h3>
+        <label class="field">
+          <span>Chế độ sao rơi</span>
+          <select id="select-mode">
+            <option value="balanced">Màn sao rơi &amp; Sao băng (Chuẩn sân khấu)</option>
+            <option value="shower">Mưa sao rơi dày đặc (Cao trào)</option>
+            <option value="meteors">Sao băng rực rỡ (Bầu trời đêm)</option>
+            <option value="dreamy">Nhẹ nhàng sâu lắng</option>
+          </select>
+        </label>
+
+        <label class="field range-field">
+          <div class="range-head">
+            <span>Mật độ sao rơi</span>
+            <output id="val-density">100%</output>
+          </div>
+          <input id="range-density" type="range" min="30" max="220" step="10" value="100" />
+        </label>
+
+        <label class="field range-field">
+          <div class="range-head">
+            <span>Tốc độ chuyển động</span>
+            <output id="val-speed">100%</output>
+          </div>
+          <input id="range-speed" type="range" min="40" max="180" step="10" value="100" />
+        </label>
+
+        <label class="field range-field">
+          <div class="range-head">
+            <span>Độ sáng Dải Ngân Hà</span>
+            <output id="val-nebula">100%</output>
+          </div>
+          <input id="range-nebula" type="range" min="50" max="150" step="5" value="100" />
+        </label>
+
+        <div class="panel-actions">
+          <button id="btn-replay" class="action-btn" type="button">↻ Phát lại mở màn (R)</button>
+          <button id="btn-burst" class="action-btn primary" type="button">✦ Thả mưa sao băng (Space)</button>
+          <button id="btn-reset" class="action-btn subtle" type="button">Khôi phục mặc định</button>
+        </div>
+      </section>
+    </div>
+  </aside>
+
+  <script>
+(function () {
+  "use strict";
+
+  const VERTEX_SRC = `
+    attribute vec2 a_pos;
+    void main() {
+      gl_Position = vec4(a_pos, 0.0, 1.0);
+    }
+  `;
+
+  const FRAGMENT_SRC = `
+    precision highp float;
+
+    uniform vec2 u_resolution;
+    uniform float u_time;
+    uniform vec2 u_parallax;
+    uniform float u_intensity;
+
+    float hash12(vec2 p) {
+      vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+      p3 += dot(p3, p3.yzx + 33.33);
+      return fract((p3.x + p3.y) * p3.z);
+    }
+
+    vec2 hash22(vec2 p) {
+      vec3 p3 = fract(vec3(p.xyx) * vec3(0.1031, 0.1030, 0.0973));
+      p3 += dot(p3, p3.yzx + 33.33);
+      return fract((p3.xx + p3.yz) * p3.zy);
+    }
+
+    float noise(vec2 p) {
+      vec2 i = floor(p);
+      vec2 f = fract(p);
+      vec2 u = f * f * (3.0 - 2.0 * f);
+
+      float a = hash12(i);
+      float b = hash12(i + vec2(1.0, 0.0));
+      float c = hash12(i + vec2(0.0, 1.0));
+      float d = hash12(i + vec2(1.0, 1.0));
+
+      return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+    }
+
+    float fbm(vec2 p) {
+      float sum = 0.0;
+      float amp = 0.5;
+      mat2 rot = mat2(0.80, 0.60, -0.60, 0.80);
+      for (int i = 0; i < 6; i++) {
+        sum += amp * noise(p);
+        p = rot * p * 2.03 + vec2(11.3, 7.1);
+        amp *= 0.5;
+      }
+      return sum;
+    }
+
+    // Crisp cellular star grain layer for unresolved Milky Way stardust
+    float microStarLayer(vec2 coord, float density, float sizePx, float twinkleSpeed) {
+      vec2 ip = floor(coord);
+      vec2 fp = fract(coord);
+      vec2 rnd = hash22(ip);
+
+      float present = step(1.0 - density, rnd.x);
+      vec2 starPos = 0.18 + 0.64 * rnd;
+      float d = length(fp - starPos);
+
+      float twinkle = 0.65 + 0.35 * sin(u_time * twinkleSpeed + rnd.y * 62.8318);
+      float spark = smoothstep(sizePx, 0.0, d);
+      spark = pow(spark, 2.1);
+
+      return present * spark * twinkle * (0.4 + 0.6 * fract(rnd.x * 17.3));
+    }
+
+    void main() {
+      vec2 p = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / u_resolution.y;
+      p += u_parallax * 0.014;
+
+      float t = u_time * 0.012;
+
+      // Rotate coordinates to match sweeping diagonal Milky Way arc (~27 deg)
+      float angle = -0.47;
+      mat2 rot = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
+      vec2 gp = rot * p;
+
+      // Gentle upward arch of the galactic plane
+      float arch = 0.085 * sin(gp.x * 1.45 + 0.25) - 0.055 * gp.x * gp.x;
+      float dy = gp.y - arch;
+
+      // Galactic bands
+      float coreBand = exp(-dy * dy * 28.0);
+      float midBand = exp(-dy * dy * 10.5);
+      float outerHalo = exp(-dy * dy * 3.8);
+
+      // Secondary upper faint nebula ribbon (top-left accent)
+      float dyUpper = dy - 0.33 + 0.04 * sin(gp.x * 2.1);
+      float upperRibbon = exp(-dyUpper * dyUpper * 55.0) * smoothstep(0.65, -0.75, gp.x);
+
+      // Domain-warped nebula clouds & dark cosmic dust rifts
+      vec2 warp = vec2(
+        fbm(gp * vec2(1.8, 3.2) + vec2(t * 0.4, 1.3)),
+        fbm(gp * vec2(1.9, 3.4) + vec2(4.7, -t * 0.3))
+      );
+
+      float cloudStructure = fbm(gp * vec2(2.6, 5.2) + warp * 0.95 + vec2(t * 0.2, 0.0));
+      float fineFilaments = fbm(gp * vec2(6.5, 13.0) + warp * 1.4 - vec2(t * 0.3, 0.0));
+
+      // Velvety dark Great Rift absorption cutting through the core
+      float riftNoise = fbm(gp * vec2(2.3, 6.8) + warp * 1.15 + vec2(2.4, 8.1));
+      float riftMask = smoothstep(0.36, 0.64, riftNoise);
+      float riftCoreWeight = exp(-dy * dy * 48.0);
+      float dustTransmission = mix(1.0, 0.22 + 0.78 * (1.0 - riftMask), riftCoreWeight * 0.92);
+
+      // Upper ribbon wispy modulation
+      float upperMod = smoothstep(0.32, 0.78, fbm(gp * vec2(3.0, 6.0) + warp * 0.7));
+
+      // Base deep obsidian-navy cosmos gradient
+      vec3 skyColor = mix(
+        vec3(0.009, 0.014, 0.034),
+        vec3(0.022, 0.034, 0.072),
+        outerHalo * 0.85 + 0.15 * clamp(0.5 - p.y, 0.0, 1.0)
+      );
+
+      // Subtle indigo outer Milky Way glow
+      vec3 outerGlowColor = vec3(0.11, 0.16, 0.31);
+      skyColor += outerGlowColor * midBand * (0.28 + 0.45 * cloudStructure) * u_intensity;
+
+      // Secondary upper wispy indigo veil
+      skyColor += vec3(0.14, 0.19, 0.34) * upperRibbon * upperMod * 0.45 * u_intensity;
+
+      // Bright silver-blue galactic core clouds
+      float coreClouds = coreBand * (0.45 + 0.55 * cloudStructure) * (0.65 + 0.35 * fineFilaments);
+      vec3 coreColor = mix(vec3(0.30, 0.37, 0.54), vec3(0.72, 0.78, 0.90), pow(coreBand, 0.75));
+      skyColor += coreColor * coreClouds * 0.62 * dustTransmission * u_intensity;
+
+      // Crisp unresolved micro-stardust embedded inside Milky Way
+      float bandDensity = clamp(coreBand * 1.15 + midBand * 0.35 + upperRibbon * 0.2, 0.0, 1.0) * dustTransmission;
+      float dust1 = microStarLayer(gp * 260.0 + vec2(13.2, 7.4), 0.36 * bandDensity + 0.025, 0.30, 1.4);
+      float dust2 = microStarLayer(gp * 460.0 + vec2(51.7, 29.1), 0.44 * bandDensity + 0.015, 0.26, 2.1);
+      float dust3 = microStarLayer(gp * 145.0 + vec2(3.9, 91.5), 0.16 * bandDensity + 0.012, 0.24, 1.0);
+
+      vec3 dustStarCol = mix(vec3(0.76, 0.84, 1.0), vec3(0.96, 0.97, 1.0), 0.55);
+      skyColor += dustStarCol * (dust1 * 0.55 + dust2 * 0.42 + dust3 * 0.75) * u_intensity;
+
+      // Subtle atmospheric tone curve to keep blacks deep and highlights silky
+      skyColor = skyColor / (1.0 + skyColor * 0.32);
+      skyColor = pow(max(skyColor, 0.0), vec3(0.95));
+
+      gl_FragColor = vec4(skyColor, 1.0);
+    }
+  `;
+
+  function createShader(gl, type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      console.warn("Cosmos shader compile warning:", gl.getShaderInfoLog(shader));
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  }
+
+  class CosmosRenderer {
+    constructor(canvas) {
+      this.canvas = canvas;
+      this.intensity = 1.0;
+      this.parallax = { x: 0, y: 0 };
+      this.targetParallax = { x: 0, y: 0 };
+      this.startTime = performance.now();
+      this.useWebGL = false;
+      this.width = 1;
+      this.height = 1;
+      this.dpr = 1;
+
+      this.init();
+    }
+
+    init() {
+      const gl =
+        this.canvas.getContext("webgl2", { antialias: false, powerPreference: "high-performance" }) ||
+        this.canvas.getContext("webgl", { antialias: false, powerPreference: "high-performance" });
+
+      if (gl) {
+        const vs = createShader(gl, gl.VERTEX_SHADER, VERTEX_SRC);
+        const fs = createShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SRC);
+        if (vs && fs) {
+          const program = gl.createProgram();
+          gl.attachShader(program, vs);
+          gl.attachShader(program, fs);
+          gl.linkProgram(program);
+
+          if (gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            this.gl = gl;
+            this.program = program;
+            this.useWebGL = true;
+
+            const buf = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            gl.bufferData(
+              gl.ARRAY_BUFFER,
+              new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
+              gl.STATIC_DRAW
+            );
+
+            const posLoc = gl.getAttribLocation(program, "a_pos");
+            gl.enableVertexAttribArray(posLoc);
+            gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+            this.uResolution = gl.getUniformLocation(program, "u_resolution");
+            this.uTime = gl.getUniformLocation(program, "u_time");
+            this.uParallax = gl.getUniformLocation(program, "u_parallax");
+            this.uIntensity = gl.getUniformLocation(program, "u_intensity");
+          }
+        }
+      }
+
+      if (!this.useWebGL) {
+        this.ctx2d = this.canvas.getContext("2d");
+      }
+
+      this.resize();
+    }
+
+    resize() {
+      this.dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+      this.width = Math.max(1, Math.floor(window.innerWidth * this.dpr));
+      this.height = Math.max(1, Math.floor(window.innerHeight * this.dpr));
+
+      this.canvas.width = this.width;
+      this.canvas.height = this.height;
+
+      if (this.useWebGL) {
+        this.gl.viewport(0, 0, this.width, this.height);
+      } else {
+        this.renderFallback2D();
+      }
+    }
+
+    setParallax(nx, ny) {
+      this.targetParallax.x = nx;
+      this.targetParallax.y = ny;
+    }
+
+    setIntensity(value) {
+      this.intensity = value;
+      if (!this.useWebGL) {
+        this.renderFallback2D();
+      }
+    }
+
+    renderFallback2D() {
+      const ctx = this.ctx2d;
+      if (!ctx) return;
+      const w = this.width;
+      const h = this.height;
+
+      const bg = ctx.createLinearGradient(0, 0, w, h);
+      bg.addColorStop(0, "#03060f");
+      bg.addColorStop(0.5, "#081024");
+      bg.addColorStop(1, "#03060f");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.save();
+      ctx.translate(w * 0.5, h * 0.5);
+      ctx.rotate(-0.46);
+      const bandGrad = ctx.createLinearGradient(0, -h * 0.28, 0, h * 0.28);
+      bandGrad.addColorStop(0, "rgba(35, 52, 96, 0)");
+      bandGrad.addColorStop(0.35, `rgba(74, 96, 146, ${0.22 * this.intensity})`);
+      bandGrad.addColorStop(0.5, `rgba(176, 194, 228, ${0.34 * this.intensity})`);
+      bandGrad.addColorStop(0.65, `rgba(74, 96, 146, ${0.22 * this.intensity})`);
+      bandGrad.addColorStop(1, "rgba(35, 52, 96, 0)");
+      ctx.fillStyle = bandGrad;
+      ctx.fillRect(-w, -h * 0.3, w * 2, h * 0.6);
+      ctx.restore();
+    }
+
+    render(now) {
+      this.parallax.x += (this.targetParallax.x - this.parallax.x) * 0.04;
+      this.parallax.y += (this.targetParallax.y - this.parallax.y) * 0.04;
+
+      if (!this.useWebGL) return;
+
+      const gl = this.gl;
+      const elapsed = (now - this.startTime) * 0.001;
+
+      gl.useProgram(this.program);
+      gl.uniform2f(this.uResolution, this.width, this.height);
+      gl.uniform1f(this.uTime, elapsed);
+      gl.uniform2f(this.uParallax, this.parallax.x, this.parallax.y);
+      gl.uniform1f(this.uIntensity, this.intensity);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
+  }
+
+  window.CosmosRenderer = CosmosRenderer;
+})();
+
+</script>
+  <script>
+(function () {
+  "use strict";
+
+  // ─── Configuration presets ────────────────────────────────────────
+  const PRESETS = {
+    balanced: { starRate: 0.45, fallingRate: 0.032, meteorInterval: 4200, meteorChance: 0.35 },
+    shower:   { starRate: 0.8,  fallingRate: 0.072, meteorInterval: 2400, meteorChance: 0.55 },
+    meteors:  { starRate: 0.25, fallingRate: 0.018, meteorInterval: 2800, meteorChance: 0.7  },
+    dreamy:   { starRate: 0.18, fallingRate: 0.012, meteorInterval: 7500, meteorChance: 0.2  },
+  };
+
+  // ─── Utility helpers ──────────────────────────────────────────────
+  const rand  = (lo, hi) => lo + Math.random() * (hi - lo);
+  const randI = (lo, hi) => Math.floor(rand(lo, hi + 1));
+  const lerp  = (a, b, t) => a + (b - a) * t;
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+  // ─── Fixed star layer (high DPI procedural) ───────────────────────
+  class FixedStarField {
+    constructor(count) {
+      this.stars = [];
+      for (let i = 0; i < count; i++) {
+        this.stars.push({
+          x: Math.random(),
+          y: Math.random(),
+          r: rand(0.35, 1.6),
+          baseAlpha: rand(0.25, 0.92),
+          twinkleSpeed: rand(0.4, 2.8),
+          twinklePhase: rand(0, Math.PI * 2),
+          hue: rand(200, 240),       // blue-white palette
+          sat: rand(5, 35),
+          brightness: rand(85, 100),
+          // A few stars get diffraction spikes
+          hasCross: Math.random() < 0.04,
+          crossLen: rand(3, 8),
+        });
+      }
+    }
+
+    draw(ctx, w, h, now) {
+      const t = now * 0.001;
+      for (const s of this.stars) {
+        const twinkle = 0.55 + 0.45 * Math.sin(t * s.twinkleSpeed + s.twinklePhase);
+        const alpha = s.baseAlpha * twinkle;
+        if (alpha < 0.03) continue;
+
+        const px = s.x * w;
+        const py = s.y * h;
+        const r  = s.r;
+
+        // Crisp star dot
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = `hsl(${s.hue}, ${s.sat}%, ${s.brightness}%)`;
+        ctx.beginPath();
+        ctx.arc(px, py, r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Soft glow halo for brighter stars
+        if (alpha > 0.5 && r > 0.8) {
+          ctx.globalAlpha = alpha * 0.18;
+          ctx.beginPath();
+          ctx.arc(px, py, r * 3.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Diffraction cross on select stars
+        if (s.hasCross && alpha > 0.4) {
+          const cl = s.crossLen * twinkle;
+          ctx.globalAlpha = alpha * 0.35;
+          ctx.strokeStyle = `hsla(${s.hue}, ${s.sat}%, 95%, 1)`;
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(px - cl, py); ctx.lineTo(px + cl, py);
+          ctx.moveTo(px, py - cl); ctx.lineTo(px, py + cl);
+          ctx.stroke();
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // ─── Falling / Drifting Star particle ─────────────────────────────
+  class FallingStar {
+    constructor(w, h, speedMul) {
+      this.reset(w, h, speedMul, true);
+    }
+
+    reset(w, h, speedMul, initial) {
+      this.x = rand(0, w);
+      this.y = initial ? rand(-h * 0.1, h) : rand(-h * 0.12, -4);
+      this.r = rand(0.5, 1.45);
+      this.vx = rand(-0.08, 0.08) * speedMul;
+      this.vy = rand(0.18, 0.65) * speedMul;
+      this.alpha = rand(0.35, 0.88);
+      this.fadeIn = 0;
+      this.fadeInSpeed = rand(0.008, 0.02);
+      this.hue = rand(210, 240);
+      this.life = 1;
+    }
+
+    update(w, h) {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.fadeIn = Math.min(1, this.fadeIn + this.fadeInSpeed);
+
+      if (this.y > h + 10 || this.x < -20 || this.x > w + 20) {
+        this.life = 0;
+      }
+    }
+
+    draw(ctx) {
+      if (this.life <= 0) return;
+      const a = this.alpha * this.fadeIn;
+      if (a < 0.02) return;
+
+      ctx.globalAlpha = a;
+      ctx.fillStyle = `hsl(${this.hue}, 22%, 94%)`;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Soft glow
+      ctx.globalAlpha = a * 0.12;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r * 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // ─── Meteor / Shooting Star ───────────────────────────────────────
+  class Meteor {
+    constructor(w, h, speedMul, fromClick) {
+      // Origin point
+      if (fromClick) {
+        // Spawn from a more natural upper region when triggered manually
+        this.x = rand(w * 0.1, w * 0.9);
+        this.y = rand(-h * 0.05, h * 0.12);
+      } else {
+        this.x = rand(-w * 0.1, w * 1.1);
+        this.y = rand(-h * 0.08, h * 0.05);
+      }
+
+      // Direction: roughly downward with varying horizontal sweep
+      const angle = rand(0.52, 1.15); // ~30°–66° from horizontal
+      const speed = rand(5.5, 12.5) * speedMul;
+      this.vx = Math.cos(angle) * speed * (Math.random() < 0.5 ? 1 : -1);
+      this.vy = Math.sin(angle) * speed;
+
+      this.tailLen = rand(120, 340);
+      this.thickness = rand(1.0, 2.4);
+      this.life = 1;
+      this.decay = rand(0.006, 0.014);
+      this.hue = rand(205, 245);
+
+      // Trail history for ultra-smooth rendering
+      this.trail = [];
+      this.maxTrail = Math.ceil(this.tailLen / speed) + 6;
+
+      // Sparkle particles spawned along the trail
+      this.sparkles = [];
+    }
+
+    update(w, h) {
+      this.life -= this.decay;
+      if (this.life <= 0) return;
+
+      this.x += this.vx;
+      this.y += this.vy;
+
+      this.trail.push({ x: this.x, y: this.y, a: this.life });
+      if (this.trail.length > this.maxTrail) this.trail.shift();
+
+      // Spawn sparkle debris
+      if (Math.random() < 0.55) {
+        this.sparkles.push({
+          x: this.x + rand(-3, 3),
+          y: this.y + rand(-3, 3),
+          vx: this.vx * rand(-0.08, 0.12) + rand(-0.6, 0.6),
+          vy: this.vy * rand(-0.04, 0.14) + rand(-0.3, 0.4),
+          r: rand(0.4, 1.1),
+          a: rand(0.5, 1),
+          decay: rand(0.012, 0.035),
+        });
+      }
+
+      // Update sparkles
+      for (const sp of this.sparkles) {
+        sp.x += sp.vx;
+        sp.y += sp.vy;
+        sp.vy += 0.02; // micro gravity
+        sp.a -= sp.decay;
+      }
+      this.sparkles = this.sparkles.filter(sp => sp.a > 0.01);
+    }
+
+    draw(ctx) {
+      if (this.trail.length < 2) return;
+
+      // Head glow flare
+      const head = this.trail[this.trail.length - 1];
+      const headAlpha = clamp(this.life, 0, 1);
+
+      if (headAlpha > 0.05) {
+        // Bright central core
+        const coreGrad = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, 6 * this.thickness);
+        coreGrad.addColorStop(0, `hsla(${this.hue}, 30%, 98%, ${headAlpha * 0.95})`);
+        coreGrad.addColorStop(0.3, `hsla(${this.hue}, 40%, 88%, ${headAlpha * 0.5})`);
+        coreGrad.addColorStop(1, `hsla(${this.hue}, 50%, 72%, 0)`);
+        ctx.fillStyle = coreGrad;
+        ctx.beginPath();
+        ctx.arc(head.x, head.y, 6 * this.thickness, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Wide bloom
+        ctx.globalAlpha = headAlpha * 0.14;
+        const bloom = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, 28);
+        bloom.addColorStop(0, `hsla(${this.hue}, 35%, 92%, 1)`);
+        bloom.addColorStop(1, `hsla(${this.hue}, 45%, 70%, 0)`);
+        ctx.fillStyle = bloom;
+        ctx.beginPath();
+        ctx.arc(head.x, head.y, 28, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      // Trail: draw from tail → head with thickness taper
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      const len = this.trail.length;
+      for (let i = 1; i < len; i++) {
+        const prev = this.trail[i - 1];
+        const cur  = this.trail[i];
+        const progress = i / len;  // 0 = tail, 1 = head
+        const taper = progress * progress;  // quadratic taper
+
+        const a = clamp(cur.a * taper, 0, 1);
+        if (a < 0.01) continue;
+
+        ctx.strokeStyle = `hsla(${this.hue}, ${25 + 20 * progress}%, ${82 + 16 * progress}%, ${a * 0.88})`;
+        ctx.lineWidth = this.thickness * (0.15 + 0.85 * taper);
+        ctx.beginPath();
+        ctx.moveTo(prev.x, prev.y);
+        ctx.lineTo(cur.x, cur.y);
+        ctx.stroke();
+      }
+
+      // Sparkle debris
+      for (const sp of this.sparkles) {
+        ctx.globalAlpha = sp.a * 0.82;
+        ctx.fillStyle = `hsla(${this.hue}, 28%, 92%, 1)`;
+        ctx.beginPath();
+        ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    get alive() {
+      return this.life > 0 || this.sparkles.length > 0;
+    }
+  }
+
+  // ─── Main Starfall Engine ─────────────────────────────────────────
+  class StarfallEngine {
+    constructor(canvas) {
+      this.canvas = canvas;
+      this.ctx = canvas.getContext("2d");
+      this.dpr = 1;
+      this.width = 1;
+      this.height = 1;
+
+      this.mode = "balanced";
+      this.densityMul = 1;
+      this.speedMul = 1;
+
+      this.fixedStars = new FixedStarField(520);
+      this.fallingStars = [];
+      this.meteors = [];
+
+      this.lastMeteorTime = 0;
+      this.burstQueue = 0;
+
+      this.resize();
+    }
+
+    resize() {
+      this.dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+      this.width  = Math.max(1, Math.floor(window.innerWidth * this.dpr));
+      this.height = Math.max(1, Math.floor(window.innerHeight * this.dpr));
+      this.canvas.width  = this.width;
+      this.canvas.height = this.height;
+    }
+
+    setMode(mode) {
+      if (PRESETS[mode]) this.mode = mode;
+    }
+
+    triggerBurst(count) {
+      this.burstQueue += count || 8;
+    }
+
+    update(now) {
+      const w = this.width;
+      const h = this.height;
+      const preset = PRESETS[this.mode];
+      const sm = this.speedMul;
+      const dm = this.densityMul;
+
+      // Spawn falling stars
+      const fallChance = preset.fallingRate * dm;
+      if (Math.random() < fallChance) {
+        this.fallingStars.push(new FallingStar(w, h, sm));
+      }
+
+      // Natural periodic meteors
+      if (now - this.lastMeteorTime > preset.meteorInterval / dm) {
+        if (Math.random() < preset.meteorChance) {
+          this.meteors.push(new Meteor(w, h, sm, false));
+        }
+        this.lastMeteorTime = now;
+      }
+
+      // Burst queue (from user interaction)
+      while (this.burstQueue > 0) {
+        this.meteors.push(new Meteor(w, h, sm * rand(0.8, 1.3), true));
+        this.burstQueue--;
+      }
+
+      // Update particles
+      for (const f of this.fallingStars) f.update(w, h);
+      this.fallingStars = this.fallingStars.filter(f => f.life > 0);
+
+      for (const m of this.meteors) m.update(w, h);
+      this.meteors = this.meteors.filter(m => m.alive);
+    }
+
+    draw(now) {
+      const ctx = this.ctx;
+      const w = this.width;
+      const h = this.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Fixed star field
+      this.fixedStars.draw(ctx, w, h, now);
+
+      // Falling / drifting stars
+      for (const f of this.fallingStars) f.draw(ctx);
+
+      // Meteors
+      for (const m of this.meteors) m.draw(ctx);
+    }
+  }
+
+  window.StarfallEngine = StarfallEngine;
+})();
+
+</script>
+  <script>
+(function () {
+  "use strict";
+
+  // ─── Bootstrap renderers ──────────────────────────────────────────
+  const cosmosCanvas   = document.getElementById("cosmos-canvas");
+  const starfallCanvas = document.getElementById("starfall-canvas");
+
+  const cosmos   = new CosmosRenderer(cosmosCanvas);
+  const starfall = new StarfallEngine(starfallCanvas);
+
+  // ─── DOM references ───────────────────────────────────────────────
+  const body          = document.body;
+  const panel         = document.getElementById("control-panel");
+  const hudControls   = document.getElementById("hud-controls");
+
+  const btnWish       = document.getElementById("btn-wish");
+  const btnFullscreen = document.getElementById("btn-fullscreen");
+  const btnToggle     = document.getElementById("btn-toggle-panel");
+  const btnClose      = document.getElementById("btn-close-panel");
+  const btnReplay     = document.getElementById("btn-replay");
+  const btnBurst      = document.getElementById("btn-burst");
+  const btnReset      = document.getElementById("btn-reset");
+
+  const inputHeader   = document.getElementById("input-header");
+  const inputName1    = document.getElementById("input-name-1");
+  const inputName2    = document.getElementById("input-name-2");
+  const inputDate     = document.getElementById("input-date");
+  const inputQuote    = document.getElementById("input-quote");
+  const selectFont    = document.getElementById("select-font");
+  const selectMode    = document.getElementById("select-mode");
+
+  const rangeDensity  = document.getElementById("range-density");
+  const rangeSpeed    = document.getElementById("range-speed");
+  const rangeNebula   = document.getElementById("range-nebula");
+  const valDensity    = document.getElementById("val-density");
+  const valSpeed      = document.getElementById("val-speed");
+  const valNebula     = document.getElementById("val-nebula");
+
+  const displayHeader = document.getElementById("display-header");
+  const displayName1  = document.getElementById("display-name-1");
+  const displayName2  = document.getElementById("display-name-2");
+  const displayDate   = document.getElementById("display-date");
+  const displayQuote  = document.getElementById("display-quote");
+
+  // ─── HUD idle auto-hide logic ─────────────────────────────────────
+  let hudTimer = null;
+  let hudHidden = false;
+
+  function showHud() {
+    body.classList.remove("hud-idle");
+    clearTimeout(hudTimer);
+    hudTimer = setTimeout(() => {
+      if (!panel.classList.contains("open")) {
+        body.classList.add("hud-idle");
+      }
+    }, 3800);
+  }
+
+  document.addEventListener("mousemove", showHud);
+  document.addEventListener("touchstart", showHud, { passive: true });
+  showHud();
+
+  // ─── Panel toggle ─────────────────────────────────────────────────
+  function togglePanel(force) {
+    const open = force !== undefined ? force : !panel.classList.contains("open");
+    panel.classList.toggle("open", open);
+    if (open) {
+      body.classList.remove("hud-idle");
+      clearTimeout(hudTimer);
+    } else {
+      showHud();
+    }
+  }
+
+  btnToggle.addEventListener("click", () => togglePanel());
+  btnClose.addEventListener("click", () => togglePanel(false));
+
+  // ─── Live text binding ────────────────────────────────────────────
+  function bindText(input, display) {
+    input.addEventListener("input", () => {
+      display.textContent = input.value;
+    });
+  }
+
+  bindText(inputHeader, displayHeader);
+  bindText(inputName1,  displayName1);
+  bindText(inputName2,  displayName2);
+  bindText(inputDate,   displayDate);
+  bindText(inputQuote,  displayQuote);
+
+  // ─── Font selector ────────────────────────────────────────────────
+  selectFont.addEventListener("change", () => {
+    body.setAttribute("data-font", selectFont.value);
+  });
+  body.setAttribute("data-font", selectFont.value);
+
+  // ─── Effect mode selector ─────────────────────────────────────────
+  selectMode.addEventListener("change", () => {
+    starfall.setMode(selectMode.value);
+  });
+
+  // ─── Range sliders ────────────────────────────────────────────────
+  function bindRange(slider, output, apply) {
+    const handler = () => {
+      const v = parseInt(slider.value, 10);
+      output.textContent = v + "%";
+      apply(v / 100);
+    };
+    slider.addEventListener("input", handler);
+    handler();
+  }
+
+  bindRange(rangeDensity, valDensity, v => { starfall.densityMul = v; });
+  bindRange(rangeSpeed,   valSpeed,   v => { starfall.speedMul   = v; });
+  bindRange(rangeNebula,  valNebula,  v => { cosmos.setIntensity(v);  });
+
+  // ─── Action buttons ───────────────────────────────────────────────
+  btnWish.addEventListener("click", () => starfall.triggerBurst(6));
+  btnBurst.addEventListener("click", () => starfall.triggerBurst(12));
+
+  btnReplay.addEventListener("click", () => {
+    body.classList.remove("animate-entrance");
+    void body.offsetWidth; // force reflow
+    body.classList.add("animate-entrance");
+  });
+
+  btnReset.addEventListener("click", () => {
+    inputHeader.value = "LỄ THÀNH HÔN";  displayHeader.textContent = inputHeader.value;
+    inputName1.value  = "Minh Châu";      displayName1.textContent  = inputName1.value;
+    inputName2.value  = "Khôi Nguyên";    displayName2.textContent  = inputName2.value;
+    inputDate.value   = "14 . 11 . 2026"; displayDate.textContent   = inputDate.value;
+    inputQuote.value  = "Từ khoảnh khắc này, mình có nhau."; displayQuote.textContent = inputQuote.value;
+    selectFont.value  = "pinyon"; body.setAttribute("data-font", "pinyon");
+    selectMode.value  = "balanced"; starfall.setMode("balanced");
+    rangeDensity.value = 100; valDensity.textContent = "100%"; starfall.densityMul = 1;
+    rangeSpeed.value   = 100; valSpeed.textContent   = "100%"; starfall.speedMul   = 1;
+    rangeNebula.value  = 100; valNebula.textContent  = "100%"; cosmos.setIntensity(1);
+  });
+
+  // ─── Fullscreen ───────────────────────────────────────────────────
+  btnFullscreen.addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  });
+
+  // ─── Click / touch to spawn shooting stars ────────────────────────
+  starfallCanvas.style.pointerEvents = "auto";
+  starfallCanvas.addEventListener("click", (e) => {
+    // Don't trigger if clicking on panel
+    if (panel.contains(e.target) || hudControls.contains(e.target)) return;
+    starfall.triggerBurst(4 + Math.floor(Math.random() * 5));
+  });
+
+  // ─── Keyboard shortcuts ───────────────────────────────────────────
+  document.addEventListener("keydown", (e) => {
+    // Don't intercept when typing in inputs
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT") return;
+
+    switch (e.key.toLowerCase()) {
+      case " ":
+        e.preventDefault();
+        starfall.triggerBurst(10);
+        break;
+      case "f":
+        btnFullscreen.click();
+        break;
+      case "c":
+        togglePanel();
+        break;
+      case "h":
+        hudHidden = !hudHidden;
+        body.classList.toggle("hud-hidden", hudHidden);
+        break;
+      case "r":
+        btnReplay.click();
+        break;
+    }
+  });
+
+  // ─── Mouse parallax ───────────────────────────────────────────────
+  document.addEventListener("mousemove", (e) => {
+    const nx = (e.clientX / window.innerWidth  - 0.5) * 2;
+    const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+    cosmos.setParallax(nx, ny);
+  });
+
+  // ─── Resize handling ──────────────────────────────────────────────
+  let resizeRaf = null;
+  window.addEventListener("resize", () => {
+    cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(() => {
+      cosmos.resize();
+      starfall.resize();
+    });
+  });
+
+  // ─── URL Query Params for Remote LED Screen Control ───────────────
+  (function applyQueryParams() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("header")) {
+      inputHeader.value = params.get("header");
+      displayHeader.textContent = inputHeader.value;
+    }
+    if (params.has("name1")) {
+      inputName1.value = params.get("name1");
+      displayName1.textContent = inputName1.value;
+    }
+    if (params.has("name2")) {
+      inputName2.value = params.get("name2");
+      displayName2.textContent = inputName2.value;
+    }
+    if (params.has("date")) {
+      inputDate.value = params.get("date");
+      displayDate.textContent = inputDate.value;
+    }
+    if (params.has("quote")) {
+      inputQuote.value = params.get("quote");
+      displayQuote.textContent = inputQuote.value;
+    }
+    if (params.has("font")) {
+      const f = params.get("font");
+      if ([...selectFont.options].some(o => o.value === f)) {
+        selectFont.value = f;
+        body.setAttribute("data-font", f);
+      }
+    }
+    if (params.has("mode")) {
+      const m = params.get("mode");
+      if ([...selectMode.options].some(o => o.value === m)) {
+        selectMode.value = m;
+        starfall.setMode(m);
+      }
+    }
+    if (params.has("density")) {
+      const d = Math.min(220, Math.max(30, parseInt(params.get("density"), 10) || 100));
+      rangeDensity.value = d;
+      valDensity.textContent = d + "%";
+      starfall.densityMul = d / 100;
+    }
+    if (params.has("speed")) {
+      const s = Math.min(180, Math.max(40, parseInt(params.get("speed"), 10) || 100));
+      rangeSpeed.value = s;
+      valSpeed.textContent = s + "%";
+      starfall.speedMul = s / 100;
+    }
+    if (params.get("hud") === "0") {
+      hudHidden = true;
+      body.classList.add("hud-hidden");
+    }
+  })();
+
+  // ─── Main animation loop ──────────────────────────────────────────
+  function loop(now) {
+    cosmos.render(now);
+    starfall.update(now);
+    starfall.draw(now);
+    requestAnimationFrame(loop);
+  }
+
+  // ─── Kick off ─────────────────────────────────────────────────────
+  requestAnimationFrame((now) => {
+    body.classList.add("animate-entrance");
+    loop(now);
+  });
+
+})();
+
+</script>
+</body>
+</html>
+
