@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lễ Thành Hôn — Minh Châu &amp; Khôi Nguyên</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Great+Vibes&family=Mea+Culpa&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="stage-ready">
+  <!-- Layer 1: Ultra-Sharp Procedural WebGL Milky Way Cosmos -->
+  <canvas id="cosmos-canvas" aria-hidden="true"></canvas>
+
+  <!-- Layer 2: High-DPI Starfield, Diffraction Stars & Falling Star / Meteor Engine -->
+  <canvas id="starfall-canvas" aria-hidden="true"></canvas>
+
+  <!-- Layer 3: Subtle Atmospheric Contrast Veil -->
+  <div class="center-aura" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- Layer 4: Centerpiece Typography -->
+  <main id="stage-content" class="stage-content" role="main">
+    <div class="ceremony-block">
+      <div class="ceremony-header">
+        <span class="hairline hairline-left" aria-hidden="true"></span>
+        <span id="display-header" class="ceremony-label">LỄ THÀNH HÔN</span>
+        <span class="hairline hairline-right" aria-hidden="true"></span>
+      </div>
+
+      <h1 class="couple-names">
+        <span id="display-name-1" class="name-line name-primary">Minh Châu</span>
+        <span class="ampersand-line" aria-label="và">&amp;</span>
+        <span id="display-name-2" class="name-line name-secondary">Khôi Nguyên</span>
+      </h1>
+
+      <p id="display-date" class="wedding-date">14 . 11 . 2026</p>
+      <p id="display-quote" class="wedding-quote">Từ khoảnh khắc này, mình có nhau.</p>
+    </div>
+  </main>
+
+  <!-- Subtle Floating Trigger (auto-fades on idle) -->
+  <div id="hud-controls" class="hud-controls">
+    <button id="btn-wish" class="hud-pill" type="button" title="Thả sao băng (Phím Space)">
+      <span class="hud-icon" aria-hidden="true">✦</span>
+      <span>Sao băng</span>
+    </button>
+    <button id="btn-fullscreen" class="hud-pill" type="button" title="Toàn màn hình (Phím F)">
+      <span class="hud-icon" aria-hidden="true">⛶</span>
+      <span>Toàn màn hình</span>
+    </button>
+    <button id="btn-toggle-panel" class="hud-pill" type="button" title="Tùy chỉnh màn sao rơi (Phím C)">
+      <span class="hud-icon" aria-hidden="true">⚙</span>
+      <span>Tùy chỉnh</span>
+    </button>
+  </div>
+
+  <!-- Collapsible Stage Customization Drawer -->
+  <aside id="control-panel" class="control-panel" aria-label="Tùy chỉnh màn sao rơi">
+    <div class="panel-header">
+      <div>
+        <h2>Tùy Chỉnh Màn Sao Rơi</h2>
+        <p>Nhấn <strong>H</strong> để ẩn/hiện nút · Click màn hình để thả sao băng</p>
+      </div>
+      <button id="btn-close-panel" class="icon-close" type="button" aria-label="Đóng bảng tùy chỉnh">✕</button>
+    </div>
+
+    <div class="panel-grid">
+      <section class="panel-section">
+        <h3>Nội Dung Hiển Thị</h3>
+        <label class="field">
+          <span>Tiêu đề lễ</span>
+          <input id="input-header" type="text" value="LỄ THÀNH HÔN" maxlength="40" />
+        </label>
+        <div class="field-row">
+          <label class="field">
+            <span>Tên thứ nhất</span>
+            <input id="input-name-1" type="text" value="Minh Châu" maxlength="32" />
+          </label>
+          <label class="field">
+            <span>Tên thứ hai</span>
+            <input id="input-name-2" type="text" value="Khôi Nguyên" maxlength="32" />
+          </label>
+        </div>
+        <div class="field-row">
+          <label class="field">
+            <span>Ngày kỷ niệm / Cưới</span>
+            <input id="input-date" type="text" value="14 . 11 . 2026" maxlength="32" />
+          </label>
+          <label class="field">
+            <span>Phông chữ tên</span>
+            <select id="select-font">
+              <option value="pinyon">Pinyon Script (Thanh mảnh)</option>
+              <option value="great-vibes">Great Vibes (Mềm mại)</option>
+              <option value="mea-culpa">Mea Culpa (Cổ điển)</option>
+              <option value="alex-brush">Alex Brush (Nét cọ)</option>
+              <option value="cormorant">Cormorant Italic (Sang trọng)</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span>Thông điệp</span>
+          <input id="input-quote" type="text" value="Từ khoảnh khắc này, mình có nhau." maxlength="90" />
+        </label>
+      </section>
+
+      <section class="panel-section">
+        <h3>Hiệu Ứng Sao Rơi Cực Nét</h3>
+        <label class="field">
+          <span>Chế độ sao rơi</span>
+          <select id="select-mode">
+            <option value="balanced">Màn sao rơi &amp; Sao băng (Chuẩn sân khấu)</option>
+            <option value="shower">Mưa sao rơi dày đặc (Cao trào)</option>
+            <option value="meteors">Sao băng rực rỡ (Bầu trời đêm)</option>
+            <option value="dreamy">Nhẹ nhàng sâu lắng</option>
+          </select>
+        </label>
+
+        <label class="field range-field">
+          <div class="range-head">
+            <span>Mật độ sao rơi</span>
+            <output id="val-density">100%</output>
+          </div>
+          <input id="range-density" type="range" min="30" max="220" step="10" value="100" />
+        </label>
+
+        <label class="field range-field">
+          <div class="range-head">
+            <span>Tốc độ chuyển động</span>
+            <output id="val-speed">100%</output>
+          </div>
+          <input id="range-speed" type="range" min="40" max="180" step="10" value="100" />
+        </label>
+
+        <label class="field range-field">
+          <div class="range-head">
+            <span>Độ sáng Dải Ngân Hà</span>
+            <output id="val-nebula">100%</output>
+          </div>
+          <input id="range-nebula" type="range" min="50" max="150" step="5" value="100" />
+        </label>
+
+        <div class="panel-actions">
+          <button id="btn-replay" class="action-btn" type="button">↻ Phát lại mở màn (R)</button>
+          <button id="btn-burst" class="action-btn primary" type="button">✦ Thả mưa sao băng (Space)</button>
+          <button id="btn-reset" class="action-btn subtle" type="button">Khôi phục mặc định</button>
+        </div>
+      </section>
+    </div>
+  </aside>
+
+  <script src="sky-shader.js" defer></script>
+  <script src="starfall-engine.js" defer></script>
+  <script src="main.js" defer></script>
+</body>
+</html>
+
