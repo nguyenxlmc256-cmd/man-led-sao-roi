@@ -126,8 +126,8 @@
 
   btnReset.addEventListener("click", () => {
     inputHeader.value = "LỄ THÀNH HÔN";  displayHeader.textContent = inputHeader.value;
-    inputName1.value  = "Minh Châu";      displayName1.textContent  = inputName1.value;
-    inputName2.value  = "Khôi Nguyên";    displayName2.textContent  = inputName2.value;
+    inputName1.value  = "Khôi Nguyên";    displayName1.textContent  = inputName1.value;
+    inputName2.value  = "Minh Châu";      displayName2.textContent  = inputName2.value;
     inputDate.value   = "14 . 11 . 2026"; displayDate.textContent   = inputDate.value;
     inputQuote.value  = "Từ khoảnh khắc này, mình có nhau."; displayQuote.textContent = inputQuote.value;
     selectFont.value  = "pinyon"; body.setAttribute("data-font", "pinyon");
